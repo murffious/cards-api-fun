@@ -5,7 +5,19 @@ fetch('https://deckofcardsapi.com/api/deck/new/')
   })
   .then(function(myJson) {
     console.log(JSON.stringify(myJson));
+    const deck_id = myJson.deck_id;
+    // make a network request to "shuffle" or generate a deck of cards.
+    fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(myJson) {
+     
+
+      console.log(JSON.stringify(myJson));
+    });
   });
+
 
 // With the returned deck id, make subsequent network 
 //requests drawing 2 cards at a time.

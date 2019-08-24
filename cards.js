@@ -3,40 +3,46 @@ let CLUBS = [];
 let HEARTS = [];
 let DIAMONDS = [];
 let deck_id; //move to class
+let HOLD = []; 
 // make a network request to "shuffle" or generate a deck of cards.
-fetch('https://deckofcardsapi.com/api/deck/new/')
+function generateShuffledDeck(){
+  fetch('https://deckofcardsapi.com/api/deck/new/')
   .then(function(response) {
     return response.json();
   })
-  .then(function(myJson) {
+  .then(async function(myJson) {
     console.log(JSON.stringify(myJson));
     deck_id = myJson.deck_id;
     // make a network request to "shuffle" or generate a deck of cards.
-   let draw =  Promise.resolve(draw2Cards(deck_id))
+    while(HOLD.length < 4){
+     await draw2Cards(deck_id)
+    }
   });
-
+}
 // sort 
-function draw2Cards(deck_id){
-  fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
+async function draw2Cards(deck_id){
+  await fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
     .then(function(response) {
       return response.json();
     })
     .then(async function(myJson) {
       sortSuitPiles(myJson)
       console.log(JSON.stringify(myJson));
-      console.log(SPADES, CLUBS, HEARTS, DIAMONDS)
+      console.log("SUIT STACKS:",SPADES, CLUBS, HEARTS, DIAMONDS,HOLD)
     });
 }
 function sortSuitPiles(myJson){
   myJson.cards.forEach(element => {
     const { suit, value } = element;
     console.log(suit, value)
+    value === "QUEEN" ? HOLD.push(suit): false;
     switch(suit){
       case "SPADES":
         // check for queen previously dranw to stop 
         SPADES.push(value);
         break;
       case "CLUBS":
+        
         CLUBS.push(value);
         break;
       case "HEARTS":
@@ -50,6 +56,15 @@ function sortSuitPiles(myJson){
     }
   });
 }
+function isQueenDrawn(suit){
+  return suit.filter(card => {
+     if(card === "QUEEN"){
+       return card;
+     }
+  })
+}
+
+generateShuffledDeck();
 // wrap call with isQueenDrawn function
 // With the returned deck id, make subsequent network 
 //requests drawing 2 cards at a time.

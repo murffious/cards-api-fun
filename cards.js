@@ -12,35 +12,45 @@ fetch('https://deckofcardsapi.com/api/deck/new/')
     console.log(JSON.stringify(myJson));
     deck_id = myJson.deck_id;
     // make a network request to "shuffle" or generate a deck of cards.
-    fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
+   let draw =  Promise.resolve(draw2Cards(deck_id))
+  });
+
+// sort 
+function draw2Cards(deck_id){
+  fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
     .then(function(response) {
       return response.json();
     })
     .then(async function(myJson) {
-     await  myJson.cards.forEach(element => {
-        const { suit, value } = element;
-        console.log(suit, value)
-        switch(suit){
-          case "SPADES":
-            SPADES.push(value);
-            break;
-          case "CLUBS":
-            CLUBS.push(value);
-            break;
-          case "HEARTS":
-            HEARTS.push(value);
-            break; 
-          case "DIAMONDS":
-            DIAMONDS.push(value);
-            break;    
-        }
-      });
+      sortSuitPiles(myJson)
       console.log(JSON.stringify(myJson));
       console.log(SPADES, CLUBS, HEARTS, DIAMONDS)
     });
+}
+function sortSuitPiles(myJson){
+  myJson.cards.forEach(element => {
+    const { suit, value } = element;
+    console.log(suit, value)
+    switch(suit){
+      case "SPADES":
+        // check for queen previously dranw to stop 
+        SPADES.push(value);
+        break;
+      case "CLUBS":
+        CLUBS.push(value);
+        break;
+      case "HEARTS":
+        HEARTS.push(value);
+        break; 
+      case "DIAMONDS":
+        DIAMONDS.push(value);
+        break;  
+      default:
+        console.log("error")
+    }
   });
-
-// sort 
+}
+// wrap call with isQueenDrawn function
 // With the returned deck id, make subsequent network 
 //requests drawing 2 cards at a time.
 

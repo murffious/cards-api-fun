@@ -6,10 +6,6 @@ let suits = {
   DIAMONDS: []
 };
 let HOLD = [];
-// Allow callback to run at most 1 time per 100ms
-// window.addEventListener("resize", throttle(callback, 100));
-// // Allow callback to run on each resize event
-// window.addEventListener("resize", callback2);
 
 async function draw2Cards() {
   await fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
@@ -47,8 +43,6 @@ function generateShuffledDeck() {
       console.log(JSON.stringify(myJson));
       deck_id = myJson.deck_id;
 
-      //fix if time
-      // dont like this originally had it checking until the HOLD.length is 4 instead of 52 times
       // Initial call
       recursiveDelay(draw2Cards, 26, 1);
     });
@@ -59,7 +53,6 @@ function generateShuffledDeck() {
 function sortSuitPiles(myJson) {
   myJson.cards.forEach(element => {
     const { suit, value } = element;
-    // const { SPADES, HEARTS, DIAMONDS, CLUBS } = suits;
     console.log(suit, value);
     value === "QUEEN" ? HOLD.push(suit) : false;
     var stack = document.getElementById(`${suit}`);
@@ -121,23 +114,6 @@ function isQueenDrawn(suit) {
   });
 }
 
+// run this to start 
 generateShuffledDeck();
 
-//move text append here for dryer better code
-// function renderStacks(suit, value){
-//   let stacks = document.getElementsByClassName('stack');
-
-//   return suits[suit].map(card => {
-//    switch(suit){
-
-//    }
-
-//  })
-
-// }
-
-// Each array should be sorted. For example, your code should print something like:
-// SPADES: [2, 3, 5, 10, JACK, QUEEN]
-// CLUBS: [ACE, 2, 4, 5, 6, 10, JACK, QUEEN, KING]
-// HEARTS: [2, 3, 5, JACK, QUEEN, KING]
-// DIAMONDS: [ACE, 2, 3, 5, 6, 7, 8, 10, QUEEN]

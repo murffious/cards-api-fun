@@ -26,9 +26,11 @@ async function draw2Cards(){
 // Function to execute X function, Y number of times with Z of interval delay 
 function recursiveDelay(functionToCall, executionsNumber, timeoutInSeconds) {
   if (executionsNumber) { //exit condition
+  if(HOLD.length< 4){
+    functionToCall();  // external function execution
 
-      functionToCall();  // external function execution
-
+  }
+     
       setTimeout(
           () => { recursiveDelay(functionToCall, executionsNumber - 1, timeoutInSeconds); //recursive call
           }, 1000 * timeoutInSeconds);
@@ -50,7 +52,7 @@ function generateShuffledDeck(){
     //fix if time
     // dont like this originally had it checking until the HOLD.length is 4 instead of 52 times
      // Initial call
-     recursiveDelay(draw2Cards, 52, 1);
+     recursiveDelay(draw2Cards, 26, 1);
    
   });
 }
@@ -65,23 +67,26 @@ function sortSuitPiles(myJson){
     console.log(suit, value)
     value === "QUEEN" ? HOLD.push(suit): false;
     var stack = document.getElementById(`${suit}`);
-  
+    var text = document.createTextNode(value);
+
     if(isQueenDrawn(suit).length ===0){
       switch(suit){
         case "SPADES":
           // check for queen previously dranw to stop 
          suits.SPADES.push(value);
-         var text = document.createTextNode(value);
          stack.appendChild(text);
           break;
         case "CLUBS":
           suits.CLUBS.push(value);
+          stack.appendChild(text);
           break;
         case "HEARTS":
           suits.HEARTS.push(value);
+          stack.appendChild(text);
           break; 
         case "DIAMONDS":
           suits.DIAMONDS.push(value);
+          stack.appendChild(text);
           break;  
         default:
           console.log("error")

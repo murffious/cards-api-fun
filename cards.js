@@ -1,81 +1,77 @@
 let deck_id; //move to class
 let suits = {
-  SPADES : [],
-  CLUBS : [],
-  HEARTS : [],
-  DIAMONDS : []
-}
-let HOLD = []; 
+  SPADES: [],
+  CLUBS: [],
+  HEARTS: [],
+  DIAMONDS: []
+};
+let HOLD = [];
 // Allow callback to run at most 1 time per 100ms
 // window.addEventListener("resize", throttle(callback, 100));
 // // Allow callback to run on each resize event
 // window.addEventListener("resize", callback2);
 
-async function draw2Cards(){
+async function draw2Cards() {
   await fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
     .then(function(response) {
       return response.json();
     })
     .then(async function(myJson) {
-      sortSuitPiles(myJson)
+      sortSuitPiles(myJson);
       console.log(JSON.stringify(myJson));
-      console.log("SUIT STACKS:",suits)
+      console.log("SUIT STACKS:", suits);
     });
 }
 
-// Function to execute X function, Y number of times with Z of interval delay 
+// Function to execute X function, Y number of times with Z of interval delay
 function recursiveDelay(functionToCall, executionsNumber, timeoutInSeconds) {
-  if (executionsNumber) { //exit condition
-  if(HOLD.length< 4){
-    functionToCall();  // external function execution
+  if (executionsNumber) {
+    //exit condition
+    if (HOLD.length < 4) {
+      functionToCall(); // external function execution
+    }
 
-  }
-     
-      setTimeout(
-          () => { recursiveDelay(functionToCall, executionsNumber - 1, timeoutInSeconds); //recursive call
-          }, 1000 * timeoutInSeconds);
+    setTimeout(() => {
+      recursiveDelay(functionToCall, executionsNumber - 1, timeoutInSeconds); //recursive call
+    }, 1000 * timeoutInSeconds);
   }
 }
-
-
 
 // make a network request to "shuffle" or generate a deck of cards.
-function generateShuffledDeck(){
-  fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
-  .then(function(response) {
-    return response.json();
-  })
-  .then(async function(myJson) {
-    console.log(JSON.stringify(myJson));
-    deck_id = myJson.deck_id;
+function generateShuffledDeck() {
+  fetch("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
+    .then(function(response) {
+      return response.json();
+    })
+    .then(async function(myJson) {
+      console.log(JSON.stringify(myJson));
+      deck_id = myJson.deck_id;
 
-    //fix if time
-    // dont like this originally had it checking until the HOLD.length is 4 instead of 52 times
-     // Initial call
-     recursiveDelay(draw2Cards, 26, 1);
-   
-  });
+      //fix if time
+      // dont like this originally had it checking until the HOLD.length is 4 instead of 52 times
+      // Initial call
+      recursiveDelay(draw2Cards, 26, 1);
+    });
 }
 
+// sort
 
-// sort 
-
-function sortSuitPiles(myJson){
+function sortSuitPiles(myJson) {
   myJson.cards.forEach(element => {
     const { suit, value } = element;
     // const { SPADES, HEARTS, DIAMONDS, CLUBS } = suits;
-    console.log(suit, value)
-    value === "QUEEN" ? HOLD.push(suit): false;
+    console.log(suit, value);
+    value === "QUEEN" ? HOLD.push(suit) : false;
     var stack = document.getElementById(`${suit}`);
     var text = document.createTextNode(value);
-    stack.appendChild(document.createTextNode (" "));
+    stack.appendChild(document.createTextNode(" "));
 
-    if(isQueenDrawn(suit).length ===0){
-      switch(suit){
+    if (isQueenDrawn(suit).length === 0) {
+      switch (suit) {
         case "SPADES":
-          // check for queen previously dranw to stop 
-         suits.SPADES.push(value);
-         stack.appendChild(text);
+          // check for queen previously dranw to stop
+          suits.SPADES.push(value);
+          stack.appendChild(text);
           break;
         case "CLUBS":
           suits.CLUBS.push(value);
@@ -84,54 +80,48 @@ function sortSuitPiles(myJson){
         case "HEARTS":
           suits.HEARTS.push(value);
           stack.appendChild(text);
-          break; 
+          break;
         case "DIAMONDS":
           suits.DIAMONDS.push(value);
           // add check for if queen to order and then add [] if desired or what not and comma
           stack.appendChild(text);
-          break;  
+          break;
         default:
-          console.log("error")
+          console.log("error");
       }
     }
-   
-   
   });
 }
 
-
-function orderStacks1(suit, value){
+function orderStacks1(suit, value) {
   let orderValue;
 
-  switch(value){
+  switch (value) {
     case "ACE":
-      orderValue = 1
+      orderValue = 1;
       break;
     case "KING":
-      orderValue = 13 
+      orderValue = 13;
       break;
     case "QUEEN":
-      orderValue = 12
-      break;  
-      case "JACK":
-      orderValue = 11
-      break; 
-    default: 
-      orderValue = Number(value);  
+      orderValue = 12;
+      break;
+    case "JACK":
+      orderValue = 11;
+      break;
+    default:
+      orderValue = Number(value);
   }
- 
 }
-function isQueenDrawn(suit){
+function isQueenDrawn(suit) {
   return suits[suit].filter(card => {
-     if(card === "QUEEN"){
-       return card;
-     }
-  })
+    if (card === "QUEEN") {
+      return card;
+    }
+  });
 }
-
 
 generateShuffledDeck();
-
 
 //move text append here for dryer better code
 // function renderStacks(suit, value){
@@ -141,13 +131,10 @@ generateShuffledDeck();
 //    switch(suit){
 
 //    }
-     
-    
+
 //  })
- 
+
 // }
-
-
 
 // Each array should be sorted. For example, your code should print something like:
 // SPADES: [2, 3, 5, 10, JACK, QUEEN]

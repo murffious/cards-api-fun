@@ -97,19 +97,18 @@ function isQueenDrawn(suit){
 
 
 generateShuffledDeck();
-// wrap call with isQueenDrawn function
-// With the returned deck id, make subsequent network 
-//requests drawing 2 cards at a time.
 
-// Keep drawing until each suit's Queen card is drawn. Then stop. 
+function renderStacks(suit){
+  let stacks = document.getElementsByClassName('stack');
 
+  return suits[suit].map(card => {
+   
+      return card;
+    
+ })
+ 
+}
 
-// Provide separate lists of all cards drawn for each suit.
-// At most make one network request each second.
-
-
-// Your final solution should print to the screen the 
-// array of drawn cards for each suit. 
 
 
 // Each array should be sorted. For example, your code should print something like:

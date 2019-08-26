@@ -1,26 +1,17 @@
-let SPADES = [];
-let CLUBS = [];
-let HEARTS = [];
-let DIAMONDS = [];
 let deck_id; //move to class
-let HOLD = []; 
-// make a network request to "shuffle" or generate a deck of cards.
-function generateShuffledDeck(){
-  fetch('https://deckofcardsapi.com/api/deck/new/')
-  .then(function(response) {
-    return response.json();
-  })
-  .then(async function(myJson) {
-    console.log(JSON.stringify(myJson));
-    deck_id = myJson.deck_id;
-    // make a network request to "shuffle" or generate a deck of cards.
-    while(HOLD.length < 4){
-     await draw2Cards(deck_id)
-    }
-  });
+let suits = {
+  SPADES : [],
+  CLUBS : [],
+  HEARTS : [],
+  DIAMONDS : []
 }
-// sort 
-async function draw2Cards(deck_id){
+let HOLD = []; 
+// Allow callback to run at most 1 time per 100ms
+// window.addEventListener("resize", throttle(callback, 100));
+// // Allow callback to run on each resize event
+// window.addEventListener("resize", callback2);
+
+async function draw2Cards(){
   await fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
     .then(function(response) {
       return response.json();
@@ -28,41 +19,82 @@ async function draw2Cards(deck_id){
     .then(async function(myJson) {
       sortSuitPiles(myJson)
       console.log(JSON.stringify(myJson));
-      console.log("SUIT STACKS:",SPADES, CLUBS, HEARTS, DIAMONDS,HOLD)
+      console.log("SUIT STACKS:",suits)
     });
 }
+
+// Function to execute X function, Y number of times with Z of interval delay 
+function recursiveDelay(functionToCall, executionsNumber, timeoutInSeconds) {
+  if (executionsNumber) { //exit condition
+
+      functionToCall();  // external function execution
+
+      setTimeout(
+          () => { recursiveDelay(functionToCall, executionsNumber - 1, timeoutInSeconds); //recursive call
+          }, 1000 * timeoutInSeconds);
+  }
+}
+
+
+
+// make a network request to "shuffle" or generate a deck of cards.
+function generateShuffledDeck(){
+  fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
+  .then(function(response) {
+    return response.json();
+  })
+  .then(async function(myJson) {
+    console.log(JSON.stringify(myJson));
+    deck_id = myJson.deck_id;
+
+    //fix if time
+    // dont like this originally had it checking until the HOLD.length is 4 instead of 52 times
+     // Initial call
+     recursiveDelay(draw2Cards, 52, 1);
+   
+  });
+}
+
+
+// sort 
+
 function sortSuitPiles(myJson){
   myJson.cards.forEach(element => {
     const { suit, value } = element;
+    // const { SPADES, HEARTS, DIAMONDS, CLUBS } = suits;
     console.log(suit, value)
     value === "QUEEN" ? HOLD.push(suit): false;
-    switch(suit){
-      case "SPADES":
-        // check for queen previously dranw to stop 
-        SPADES.push(value);
-        break;
-      case "CLUBS":
-        
-        CLUBS.push(value);
-        break;
-      case "HEARTS":
-        HEARTS.push(value);
-        break; 
-      case "DIAMONDS":
-        DIAMONDS.push(value);
-        break;  
-      default:
-        console.log("error")
+    if(isQueenDrawn(suit).length ===0){
+      switch(suit){
+        case "SPADES":
+          // check for queen previously dranw to stop 
+         suits.SPADES.push(value);
+          break;
+        case "CLUBS":
+          suits.CLUBS.push(value);
+          break;
+        case "HEARTS":
+          suits.HEARTS.push(value);
+          break; 
+        case "DIAMONDS":
+          suits.DIAMONDS.push(value);
+          break;  
+        default:
+          console.log("error")
+      }
     }
+   
+   
   });
 }
 function isQueenDrawn(suit){
-  return suit.filter(card => {
+  return suits[suit].filter(card => {
      if(card === "QUEEN"){
        return card;
      }
   })
 }
+
 
 generateShuffledDeck();
 // wrap call with isQueenDrawn function

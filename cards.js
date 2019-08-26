@@ -98,8 +98,26 @@ function sortSuitPiles(myJson){
 }
 
 
-function orderStacks(){
+function orderStacks(suit, value){
+  let orderValue;
 
+  switch(value){
+    case "ACE":
+      orderValue = 1
+      break;
+    case "KING":
+      orderValue = 13 
+      break;
+    case "QUEEN":
+      orderValue = 12
+      break;  
+      case "JACK":
+      orderValue = 11
+      break; 
+    default: 
+      orderValue = Number(value);  
+  }
+ 
 }
 function isQueenDrawn(suit){
   return suits[suit].filter(card => {
@@ -112,18 +130,20 @@ function isQueenDrawn(suit){
 
 generateShuffledDeck();
 
-function renderStacks(suit){
-  let stacks = document.getElementsByClassName('stack');
 
-  return suits[suit].map(card => {
-   switch(suit){
+//move text append here for dryer better code
+// function renderStacks(suit, value){
+//   let stacks = document.getElementsByClassName('stack');
 
-   }
+//   return suits[suit].map(card => {
+//    switch(suit){
+
+//    }
      
     
- })
+//  })
  
-}
+// }
 
 
 

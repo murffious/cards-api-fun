@@ -68,6 +68,7 @@ function sortSuitPiles(myJson){
     value === "QUEEN" ? HOLD.push(suit): false;
     var stack = document.getElementById(`${suit}`);
     var text = document.createTextNode(value);
+    stack.appendChild(document.createTextNode (" "));
 
     if(isQueenDrawn(suit).length ===0){
       switch(suit){
@@ -86,6 +87,7 @@ function sortSuitPiles(myJson){
           break; 
         case "DIAMONDS":
           suits.DIAMONDS.push(value);
+          // add check for if queen to order and then add [] if desired or what not and comma
           stack.appendChild(text);
           break;  
         default:
@@ -98,7 +100,7 @@ function sortSuitPiles(myJson){
 }
 
 
-function orderStacks(suit, value){
+function orderStacks1(suit, value){
   let orderValue;
 
   switch(value){

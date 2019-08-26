@@ -64,11 +64,15 @@ function sortSuitPiles(myJson){
     // const { SPADES, HEARTS, DIAMONDS, CLUBS } = suits;
     console.log(suit, value)
     value === "QUEEN" ? HOLD.push(suit): false;
+    var stack = document.getElementById(`${suit}`);
+  
     if(isQueenDrawn(suit).length ===0){
       switch(suit){
         case "SPADES":
           // check for queen previously dranw to stop 
          suits.SPADES.push(value);
+         var text = document.createTextNode(value);
+         stack.appendChild(text);
           break;
         case "CLUBS":
           suits.CLUBS.push(value);
@@ -87,6 +91,11 @@ function sortSuitPiles(myJson){
    
   });
 }
+
+
+function orderStacks(){
+
+}
 function isQueenDrawn(suit){
   return suits[suit].filter(card => {
      if(card === "QUEEN"){
@@ -102,8 +111,10 @@ function renderStacks(suit){
   let stacks = document.getElementsByClassName('stack');
 
   return suits[suit].map(card => {
-   
-      return card;
+   switch(suit){
+
+   }
+     
     
  })
  

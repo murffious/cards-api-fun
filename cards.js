@@ -109,25 +109,11 @@ let ordered3 = orderStacks2(item3)
 let ordered4 = orderStacks2(item4)
 
 console.log(ordered1, ordered2, ordered3, ordered4)
-document.getElementById("SPADES").innerHTML = "Paragraph changed!";
-document.getElementById("CLUBS").innerHTML = "Paragraph changed!";
-document.getElementById("HEARTS").innerHTML = "Paragraph changed!";
-document.getElementById("DIAMONDS").innerHTML = "Paragraph changed!";
-
-//  let stacker = await document.getElementsByClassName().innerHTML;
-//  let unorderedCards = await JSON.stringify(stacker).split(" ");
- 
-//  let theCardsInStack = unorderedCards.slice(1);
-//  let noSpaces = await theCardsInStack.filter(item=>{
-//    if(item !== "" && item !== " "&& item !== `"""`){
-//  return item;
-//    }
-  
-// })
-//  console.log("yoyoyoyoyo", theCardsInStack)
-//  let convertToNums = await orderStacks1(theCardsInStack);
-//  console.log(convertToNums)
-//  sortArr(convertToNums)
+// document.getElementById("SPADES").innerHTML = "Paragraph changed!";
+// document.getElementById("CLUBS").innerHTML = "Paragraph changed!";
+// document.getElementById("HEARTS").innerHTML = "Paragraph changed!";
+// document.getElementById("DIAMONDS").innerHTML = "Paragraph changed!";
+// INSERT BACK ON TO DOM after ordered
 }
 function sortArr(arr){
   return arr.sort();

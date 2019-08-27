@@ -7,12 +7,12 @@ let suits = {
 };
 let HOLD = [];
 
-async function draw2Cards() {
-  await fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
+function draw2Cards() {
+  fetch(`https://deckofcardsapi.com/api/deck/${deck_id}/draw/?count=2`)
     .then(function(response) {
       return response.json();
     })
-    .then(async function(myJson) {
+    .then(function(myJson) {
       // console.log(JSON.stringify(myJson));
       // console.log("SUIT STACKS:", suits);
       
@@ -44,7 +44,7 @@ function generateShuffledDeck() {
     .then(function(response) {
       return response.json();
     })
-    .then(async function(myJson) {
+    .then(function(myJson) {
       // console.log(JSON.stringify(myJson));
       deck_id = myJson.deck_id;
       
@@ -58,7 +58,7 @@ function generateShuffledDeck() {
 // sort
 
 function sortSuitPiles(myJson) {
-  myJson.cards.forEach(async element => {
+  myJson.cards.forEach(element => {
     const { suit, value } = element;
     value === "QUEEN" ? HOLD.push(suit) : false;
     var stack = document.getElementById(`${suit}`);
